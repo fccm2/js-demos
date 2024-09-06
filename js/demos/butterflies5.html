@@ -1,0 +1,177 @@
+<html>
+<head>
+<title>butterflies5</title>
+<style>
+body {
+  background:#bbf;
+  padding-top:14px;
+  padding-left:16px;
+}
+canvas {
+  background:#22b;
+}
+</style>
+</head>
+<body>
+<canvas width="500" height="310" id="c1">
+</canvas>
+<script>
+const canvas = document.querySelector("#c1");
+const c = canvas.getContext("2d");
+
+const w = 500;
+const h = 310;
+
+var i = 0;
+var j = 0;
+
+var rand = Math.random ;
+var round = Math.round ;
+var floor = Math.floor ;
+var abs = Math.abs ;
+
+function rnd(a, b) {
+  return floor( a + rand() * (b - a) );
+}
+
+c.imageSmoothingEnabled = false;
+
+// https://opengameart.org/content/butterflies
+// 9 different butterflies in pixelart, v1.0
+
+const img = new Image();
+img.src = "./butterflies.png";
+
+let r1 = {
+  name: "yellow",  // Machaon
+  x:5, y:5,
+  w:27, h:24,
+};
+
+let r2 = {
+  name: "orange",  // Charaxe Paphianus
+  x:36, y:13,
+  w:19, h:14,
+};
+
+let r3 = {
+  name: "red",  // Lemonias Emylius
+  x:56, y:14,
+  w:19, h:14,
+};
+
+let r4 = {
+  name: "tiger",  // Nymphalidae Neptis
+  x:75, y:3,
+  w:33, h:20,
+};
+
+let r5 = {
+  name: "orange2",  // Monarc
+  x:115, y:3,
+  w:39, h:31,
+};
+
+let r6 = {
+  name: "green",  // Ornithoptera Priamus
+  x:4, y:33,
+  w:31, h:23,
+};
+
+let r7 = {
+  name: "blue",  // Morpho Anaxibia
+  x:40, y:31,
+  w:39, h:28,
+};
+
+let r8 = {
+  name: "green2",  // Charaxe Dilutus
+  x:85, y:38,
+  w:25, h:20,
+};
+
+let r9 = {
+  name: "purple",  // Lycaenidae Amblypodia
+  x:119, y:37,
+  w:27, h:22,
+};
+
+let rs = [
+  r1, r2, r3, r4, r5, r6, r7, r8, r9,
+];
+
+function drawRect(x, y, w, h, cl) {
+  c.fillStyle = cl;
+  c.fillRect(x, y, w, h);
+}
+
+function drawBg() {
+  c.fillStyle = '#22b';
+  c.fillRect(0, 0, w, h);
+  drawRect(0, 0, w, 230, '#44d');
+  drawRect(0, 230, w, h-230, '#2b2');
+}
+
+function drawCld1(x, y) {
+  c.fillStyle = '#dde';
+  c.arc(x+22, 37, 22, 0, 6.2831);  c.fill();
+  c.fillRect(x+22, 15, 60, 44);
+  c.arc(x+82, 37, 22, 0, 6.2831);  c.fill();
+}
+
+function drawCld() {
+  drawCld1(w-125, 15);
+}
+
+function setId() {
+  c.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+function drawTile(r, x, y) {
+  let sx = r.x;
+  let sy = r.y;
+  let sw = r.w;
+  let sh = r.h;
+  let dx = x;
+  let dy = y;
+  let dw = sw * 2;
+  let dh = sh * 2;
+  c.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+}
+
+setTimeout(loop, 100);
+
+function loop() {
+  setId();
+  drawBg();
+  drawCld();
+  let i = rnd(0, 9);
+  let ri = rs[i];
+  let x = rnd(0, w - ri.w * 2);
+  let y = rnd(0, h - ri.h * 2);
+  drawTile(ri, x, y);
+  setTimeout(loop, 2800);
+}
+
+</script>
+</body>
+</html>
+<!--
+
+// Image Infos:
+
+// Image Origin: "OpenGameArt.org"
+//
+// https://opengameart.org/content/butterflies
+
+// Name and/or pseudo indicated as the image author:
+// "Ivan Voirol"
+
+// License: "CC-BY"
+
+// License(s):
+//  CC-BY (version 3.0)
+//  GPL (version 2.0 or 3.0)
+//  CC0
+
+-->

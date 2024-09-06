@@ -1,0 +1,80 @@
+; 9 different butterflies in pixelart, v1.0
+
+(sprite
+  (name "yellow") ; Machaon
+  (pos 3 4)
+  (dim 27 24)
+)
+
+(sprite
+  (name "orange") ; Charaxe Paphianus
+  (pos 34 12)
+  (dim 19 14)
+)
+
+(sprite
+  (name "red") ; Lemonias Emylius
+  (pos 54 13)
+  (dim 19 14)
+)
+
+(sprite
+  (name "tiger") ; Nymphalidae Neptis
+  (pos 73 2)
+  (dim 33 20)
+)
+
+(sprite
+  (name "orange2") ; Monarc
+  (pos 113 2)
+  (dim 39 31)
+)
+
+(sprite
+  (name "green") ; Ornithoptera Priamus
+  (pos 2 32)
+  (dim 31 23)
+)
+
+(sprite
+  (name "blue") ; Morpho Anaxibia
+  (pos 38 30)
+  (dim 39 28)
+)
+
+(sprite
+  (name "green2") ; Charaxe Dilutus
+  (pos 83 37)
+  (dim 25 20)
+)
+
+(sprite
+  (name "purple") ; Lycaenidae Amblypodia
+  (pos 117 36)
+  (dim 27 23)
+)
+
+; File Infos:
+
+(author
+  (name "Ivan Voirol")
+)
+
+(license "CC-BY")
+
+(origin
+  (url "https://opengameart.org/content/butterflies")
+  (name "OpenGameArt.org")
+)
+
+; From:
+;  https://opengameart.org/content/butterflies
+
+; Author: 
+;  Ivan Voirol
+
+; License(s): 
+;  CC-BY 3.0
+;  GPL 3.0
+;  GPL 2.0
+;  CC0
