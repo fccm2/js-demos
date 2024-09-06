@@ -1,0 +1,982 @@
+<html>
+<head>
+<title>k10e5c3</title>
+<style>
+body {
+  background:#112;
+  padding-left:14px;
+  padding-top:12px;
+}
+canvas { background:#161628; }
+</style>
+</head>
+<body>
+<canvas id="c1">
+</canvas>
+<script>
+var cnv = document.querySelector("#c1");
+var ctx = cnv.getContext("2d");
+
+//const w = 416;
+const w = 360;
+const h = 360;
+
+const _w = 360;
+const _h = 360;
+
+cnv.width = w;
+cnv.height = h;
+
+var i = 0;
+var j = 0;
+
+var rand = Math.random ;
+var round = Math.round ;
+var floor = Math.floor ;
+var abs = Math.abs ;
+
+function rnd(a, b) {
+  b--;
+  return floor( a + rand() * (b-a) );
+}
+
+function rnd2(n) {
+  return floor( rand() * n );
+}
+
+function rnd3(a) {
+  return round( rand() * a );
+}
+
+const _clA = '#8e2';
+const _clB = '#f82';
+const _clC = '#44b';
+
+const _clD = '#446';
+const _clE = '#334';
+
+var cl1 = _clE;  // board color
+var cl2 = _clB;  // items color
+var cl3 = _clC;  // side color
+
+var cl5 = '#f00';
+
+
+var cls = [
+  '#e22',
+  '#f72',
+  '#3f2',
+  '#46f',
+  '#2ff',
+  '#a2c',
+];
+
+if (1)
+{
+ cls = [
+  '#886',
+  '#688',
+  '#868',
+  '#866',
+  '#686',
+  '#668',
+ ];
+}
+
+if (1)
+{
+ cls = [
+  '#996',
+  '#699',
+  '#969',
+  '#a77',
+  '#7a7',
+  '#77a',
+ ];
+}
+
+if (1)
+{
+ cls = [
+  '#bb7',
+  '#7bb',
+  '#b7b',
+  '#c88',
+  '#8c8',
+  '#88c',
+ ];
+}
+
+if (1)
+{
+ cls = [
+  '#cc7',
+  '#7cc',
+  '#c7c',
+  '#d88',
+  '#8d8',
+  '#88d',
+ ];
+}
+
+if (1)
+{
+ cls = [
+  '#ff7',
+  '#7ff',
+  '#f7f',
+  '#f66',
+  '#6f6',
+  '#66f',
+ ];
+}
+
+/*
+function swCl1() {
+  let cls_0 = cls[0];
+  
+  cls[0] = cls[1];
+  cls[1] = cls[2];
+  cls[2] = cls[3];
+  cls[3] = cls[4];
+  cls[4] = cls[5];
+  cls[5] = cls_0 ;
+}
+*/
+
+
+function setId() {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+
+function drawBg() {
+  setId();
+  //ctx.fillStyle = '#28283b';
+  ctx.fillStyle = '#161628';
+  ctx.fillRect(0, 0, w, h);
+}
+
+
+
+function drawRect1(r, cl) {
+  ctx.strokeStyle = cl;
+  ctx.strokeRect(r.x, r.y, r.w, r.h);
+}
+
+
+function rect1(x, y, w, h) {
+  let rect = {
+    x:x, y:y, w:w, h:h,
+  };
+  return rect;
+}
+
+function mvRect1(r, x, y) {
+  let rect = rect1(r.x + x, r.y + y, r.w, r.h);
+  return rect;
+}
+
+
+const r1 = rect1(_w-52, _h-52, 44, 44);
+const r2 = rect1(8, _h-52, 44, 44);
+const r3 = rect1(_w-52, 8, 44, 44);
+const r4 = rect1(8, 8, 44, 44);
+
+const r5 = mvRect1(r1, 56, 0);
+const r6 = mvRect1(r3, 56, 0);
+
+const r7 = mvRect1(r1, 56, 56);
+const r8 = mvRect1(r3, 56, -56);
+
+
+
+function point(x, y) {
+  let pnt = { x:x, y:y };
+  return pnt;
+}
+
+
+
+var sld_x = 0;
+var sld_y = 0;
+
+var items = [];
+
+
+
+window.addEventListener("keydown",
+  function (ev) {
+    switch (ev.keyCode) {
+      case 37:  // left
+        turnSldL();
+        break;
+      case 38:  // up
+        moveSldItem();
+        draw();
+        break;
+      case 39:  // right
+        turnSldR();
+        break;
+      case 40:  // down
+        break;
+    }
+    /*
+    if (ev.key == 'p') setd(sn1, d0);
+    if (ev.key == ' ') setd(sn1, d0);
+    if (ev.key == 'a') putTwr(sn1);
+    if (ev.key == 's') swtchSn();
+    */
+  }, true
+);
+
+
+cnv.addEventListener("mousedown",
+  function (e) {
+    let p = getPos(e);
+    if (1)
+    {
+      selectItem(p);
+      sld_x = p.x;
+      sld_y = p.y;
+      draw();
+    }
+    if (1)
+    {
+     if (pntInRect(p, r1)) {
+       //moveItems();
+       swClCcw();
+       draw();
+     }
+     if (pntInRect(p, r2)) {
+       //i = rnd2(6);
+       //cls[i] = '#779';
+       moveItems();
+       draw();
+     }
+     if (pntInRect(p, r3)) {
+       //cls[1] = '#779';
+       swClCw();
+       draw();
+     }
+     if (pntInRect(p, r4)) {
+       initItems();
+       draw();
+     }
+    }
+    if (0)
+    {
+      swCl();
+      setTimeout(loop, 400);
+    }
+    //setTimeout(loop, 10);
+  }, false
+);
+
+
+function getPos(mouse) {
+  let cRect = cnv.getBoundingClientRect();
+  return {
+    x:mouse.clientX - cRect.left,
+    y:mouse.clientY - cRect.top,
+  };
+}
+
+
+
+var n = 2;
+var sp = 36;
+var d = 48;
+var r = 10;
+
+var lw1 = 3.4;
+var lw2 = 4.6;
+var lw3 = 4.2;
+
+if (1)
+{
+  n = 3;
+  sp = 24;
+  d = 32;
+  r = 6;
+}
+if (1)
+{
+  n = 4;
+  sp = 19;
+  d = 26;
+  r = 5;
+}
+if (1)
+{
+  n = 5;
+  sp = 15.5;
+  d = 20;
+  r = 4;
+}
+if (1)
+{
+  n = 6;
+  sp = 13;
+  d = 18;
+  r = 3.2;
+  
+  lw1 = 3.0;
+  lw2 = 3.6;
+}
+if (1)
+{
+  n = 7;
+  sp = 11;
+  d = 17;
+  r = 2.8;
+  
+  lw1 = 2.6;
+  lw2 = 3.2;
+}
+if (0)
+{
+  n = 8;
+  sp = 9.8;
+  d = 12.8;
+  r = 2.4;
+  
+  lw1 = 2.2;
+  lw2 = 2.8;
+}
+if (0)
+{
+  n = 9;
+  sp = 8.8;
+  d = 11.9;
+  r = 2.4;
+  
+  lw1 = 2.0;
+  lw2 = 2.6;
+}
+
+
+
+const shp = new Path2D();
+shp.arc(22, 22, r, 0, 6.2830);
+
+
+const shp2 = new Path2D();
+shp2.arc(_w/2, _h/2, _w * 0.468, 0, 6.2830);
+
+
+
+
+function drawShp(shp, _x, _y, cl) {
+  setId();
+  _x--;  _y--;
+  ctx.strokeStyle = cl;
+  ctx.translate(sp * _x + d, sp * _y + d);
+  ctx.translate(-80, 0);
+  ctx.stroke(shp);
+}
+
+
+
+function drawShp2(cl) {
+  setId();
+  ctx.lineWidth = 4.6;
+  ctx.strokeStyle = cl;
+  ctx.translate(0, 2);
+  ctx.stroke(shp2);
+}
+
+
+
+// size of the edge of the grid
+var edge = (4 * n) + 1;
+
+
+var side = [];
+function sidePos1() {
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < n; j++) {
+      let x1 = i;
+      let x2 = (edge - 1) - i;
+      let x3 = x1 + n;
+      let y1 = j;
+      let y2 = (edge - 1) - j;
+      let y3 = y1 + n;
+      let x4 = x2 - n;
+      let y4 = y2 - n;
+      side.push( { x:x1, y:y1 } );
+      side.push( { x:x2, y:y2 } );
+      side.push( { x:x1, y:y2 } );
+      side.push( { x:x2, y:y1 } );
+      side.push( { x:x3, y:y1 } );
+      side.push( { x:x1, y:y3 } );
+      side.push( { x:x4, y:y2 } );
+      side.push( { x:x2, y:y4 } );
+    }
+  }
+}
+sidePos1();
+
+
+function sidePos2() {
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < n-i; j++) {
+      let x1 = i;
+      let y1 = (2 * n) + j;
+      side.push( { x:x1, y:y1 } );
+      side.push( { x:y1, y:x1 } );
+      let x2 = (4 * n) - x1;
+      let y2 = (4 * n) - y1;
+      side.push( { x:x2, y:y2 } );
+      side.push( { x:y2, y:x2 } );
+    }
+  }
+}
+sidePos2();
+
+
+var init1 = [];
+var init2 = [];
+var init3 = [];
+var init4 = [];
+var init5 = [];
+var init6 = [];
+function initPos() {
+  for (i = 0; i < n; i++) {
+    for (j = n-i-1; j < n; j++) {
+      let x1 = i;
+      let y1 = j + (2 * n) + 1;
+      init1.push( { x:x1, y:y1 } );
+      init2.push( { x:y1, y:x1 } );
+      let x2 = (4 * n) - x1;
+      let y2 = (4 * n) - y1;
+      init3.push( { x:x2, y:y2 } );
+      init4.push( { x:y2, y:x2 } );
+      let x3 = x2 - (2 * n) - 1;
+      let y3 = y2;
+      init5.push( { x:y3, y:x3 } );
+      let x4 = y1;
+      let y4 = x1 + (2 * n) + 1;
+      init6.push( { x:x4, y:y4 } );
+    }
+  }
+}
+initPos();
+
+
+function gameArea1(x, y) {
+  for (let p of side) {
+    if (p.x == x)
+      if (p.y == y) return false;
+  }
+  return true;
+}
+
+
+var gameArea = [];
+function gameAreaPos()
+{
+  for (i = 0; i < edge; i++) {
+    for (j = 0; j < edge; j++) {
+      if (gameArea1(i, j))
+        gameArea.push( { x:i, y:j } );
+    }
+  }
+}
+gameAreaPos();
+/*
+var nSide = num(side);
+var nBoard = num(board);
+*/
+side = [];
+
+
+function onGameArea(x, y) {
+  for (let p of gameArea) {
+    if (p.x == x && p.y == y)
+      return true;
+  }
+  return false;
+}
+
+
+
+function lineWidth(lw) {
+  ctx.lineWidth = lw;
+}
+
+
+
+
+// convCoords();
+
+function convCoord(i, j) {
+  return {
+    x: i + (j * 0.5),
+    y: j,
+  };
+}
+
+function convCoord2(_x, _y) {
+  _x--;
+  _y--;
+  
+  _x = sp * _x + d;
+  _y = sp * _y + d;
+  
+  _x -= 80;
+  
+  _x += 22;
+  _y += 22;
+  
+  return {
+    x: _x,
+    y: _y,
+  };
+}
+
+
+
+
+// directions
+
+const d1 = { x:1, y:0 };
+const d2 = { x:0, y:1 };
+const d3 = { x:-1, y:1 };
+const d4 = { x:-1, y:0 };
+const d5 = { x:0, y:-1 };
+const d6 = { x:1, y:-1 };
+
+const ds = [ d1, d2, d3, d4, d5, d6 ];
+
+
+//var items = [];
+function addItemsR() {
+  for (i = 0; i < edge; i++) {
+    for (j = 0; j < edge; j++) {
+      if (onGameArea(i, j)) {
+        if (somThr(i, j)) { }
+        else
+        {
+          if (rand() > 0.4) {
+            //let p = point(i, j);
+            let cl = rnd(0, 3);
+            //addItem(p, cl);{
+            let d = rnd(0, 5);
+            items.push(
+              { x:i, y:j, z:0, dir:d, cl:cl }
+            );
+          }
+        }
+      }
+    }
+  }
+}
+//addItemsR();
+
+
+function addItem(p, cl, z=0) {
+  let d = rnd(0, 5);
+  items.push(
+    { x:p.x, y:p.y, z:z, sld:0, dir:d, cl:cl }
+  );
+}
+
+function addItems(init, cl) {
+  for (let p of init) {
+    addItem(p, cl);
+  }
+}
+
+function _initItems() {
+  items = [];
+  addItems(init1, 0);
+  addItems(init2, 1);
+  addItems(init3, 2);
+  addItems(init4, 3);
+  addItems(init5, 4);
+  addItems(init6, 5);
+}
+
+var initA = init3;
+var initB = init6;
+var initC = init4;
+var initD = init1;
+var initE = init5;
+var initF = init2;
+
+var clA = 2;
+var clB = 5;
+var clC = 3;
+var clD = 0;
+var clE = 4;
+var clF = 1;
+
+function initItems() {
+  items = [];
+  addItems(initA, clA);
+  addItems(initB, clB);
+  addItems(initC, clC);
+  addItems(initD, clD);
+  addItems(initE, clE);
+  addItems(initF, clF);
+}
+initItems();
+
+//var nIt = num(items);
+
+
+function swClCcw() {
+  cls_A = cls[clA];
+  
+  cls[clA] = cls[clB];
+  cls[clB] = cls[clC];
+  cls[clC] = cls[clD];
+  cls[clD] = cls[clE];
+  cls[clE] = cls[clF];
+  cls[clF] = cls_A ;
+}
+
+function swClCw() {
+  cls_F = cls[clF];
+  
+  cls[clF] = cls[clE];
+  cls[clE] = cls[clD];
+  cls[clD] = cls[clC];
+  cls[clC] = cls[clB];
+  cls[clB] = cls[clA];
+  cls[clA] = cls_F ;
+}
+
+function swCl() { swClCw(); }
+
+
+function somThr(i, j) {
+  for (let p of items) {
+    if (p.x == i && p.y == j)
+      return true;
+  }
+  return false;
+}
+
+
+function numThr(i, j) {
+  var _num = 0;
+  for (let p of items) {
+    if (p.x == i && p.y == j) { _num++; }
+  }
+  return _num;
+}
+
+
+function numThrZ(i, j, k) {
+  var _num = 0;
+  for (let p of items) {
+    if (p.x == i &&
+        p.y == j &&
+        p.z == k) { _num++; }
+  }
+  return _num;
+}
+
+
+
+function drawItems() {
+  ctx.lineWidth = lw2;
+  for (let d of items) {
+    let p = convCoord(d.x, d.y);
+    let cl = cls[d.cl];
+    drawShp(shp, p.x, p.y, cl);
+    
+    if (d.sld == 1)
+    drawShp(shp, p.x, p.y, '#eee');
+  }
+}
+
+
+function selectItem(s) {
+  for (let d of items) {
+    d.sld = 0;
+  }
+  for (let d of items) {
+    let p1 = convCoord(d.x, d.y);
+    let p2 = convCoord2(p1.x, p1.y);
+    let rad = r * 1.2;
+    if (
+      Math.abs(p2.x - s.x) < rad &&
+      Math.abs(p2.y - s.y) < rad )
+    {
+      d.sld = 1;
+      return ;
+    }
+  }
+}
+
+
+function numSld() {
+  var _num = 0;
+  for (let p of items) {
+    if (p.sld == 1) { _num++; }
+  }
+  return _num;
+}
+
+
+function getSld() {
+  for (let p of items) {
+    if (p.sld == 1) return p;
+  }
+}
+
+
+function moveSldItem() {
+  if (numSld() > 0)
+  {
+    let p = getSld();
+    {
+      let d = ds[p.dir];
+      let _x = p.x + d.x;
+      let _y = p.y + d.y;
+      if (onGameArea(_x, _y)) {
+        if (somThr(_x, _y))
+        { }
+        else
+        {
+          p.x = _x;
+          p.y = _y;
+        }
+      }
+    }
+  }
+}
+
+
+
+function moveItem() {
+  {
+    let p = rndChoice(items);
+    {
+      let d = ds[p.dir];
+      let _x = p.x + d.x;
+      let _y = p.y + d.y;
+      if (onGameArea(_x, _y)) {
+        if (somThr(_x, _y))
+        { }
+        else
+        {
+          p.x = _x;
+          p.y = _y;
+        }
+      }
+    }
+  }
+}
+
+
+
+function moveItem2() {
+  let _done = false;
+  let _attmp = 0;
+  while (_done == false)
+  {
+    _attmp++;
+    if (_attmp > 8) _done = true;
+    
+    let p = rndChoice(items);
+    {
+      let d = ds[p.dir];
+      let _x = p.x + d.x;
+      let _y = p.y + d.y;
+      if (onGameArea(_x, _y)) {
+        if (somThr(_x, _y))
+        { }
+        else
+        {
+          p.x = _x;
+          p.y = _y;
+          _done = true;
+        }
+      }
+    }
+  }
+}
+
+
+function moveItemMayb() {
+  if (rand() > 0.4) {
+    moveItem();
+  }
+}
+
+
+function moveItems() {
+  //let n = rnd(5, 12);
+  let n = rnd(24, 64);
+  for (i = 0; i < n; i++) {
+    moveItem();
+  }
+}
+
+
+function changeDirs() {
+  for (let p of items) {
+    if (p.sld != 1)
+    if (rand() > 0.8) {
+      p.dir = floor(rand() * 6);
+    }
+  }
+}
+
+
+function turnSld() {
+  for (let p of items) {
+    if (p.sld == 1) {
+      p.dir = floor(rand() * 6);
+    }
+  }
+}
+
+
+function turnSldR() {
+  for (let p of items) {
+    if (p.sld == 1) {
+      p.dir += 1;
+      p.dir %= 6;
+    }
+  }
+}
+
+
+function turnSldL() {
+  for (let p of items) {
+    if (p.sld == 1) {
+      p.dir += 5;
+      p.dir %= 6;
+    }
+  }
+}
+
+
+
+setTimeout(loop, 100);
+function loop() {
+  draw();
+  step();
+  setTimeout(loop, 1600);
+}
+
+
+function step() {
+  moveItemMayb();
+  changeDirs();
+}
+
+
+function draw()
+{
+ drawBg();
+ ctx.fillStyle = '#446';
+ ctx.font = '16px sans';
+ /*
+ ctx.fillText(_sw, 6, 20);
+ ctx.fillText(nSide, 6, 320);
+ ctx.fillText(nIt, 6, 350);
+ */
+ //ctx.fillText(numSld(), 6, 60);
+ 
+ /*
+ ctx.fillText(sld_x, 6, 20);
+ ctx.fillText(sld_y, 6, 40);
+ */
+ 
+ //ctx.lineWidth = 3.4;
+ //drawShp(shp, 3, 3, cl1);
+ drawShp2('#3344');
+ 
+ for (i = 0; i < edge; i++) {
+   for (j = 0; j < edge; j++) {
+     let p = convCoord(i, j);
+     if (onGameArea(i, j)) {
+       ctx.lineWidth = lw1;
+       drawShp(shp, p.x, p.y, cl1);
+     } else {
+       ctx.lineWidth = lw2;
+       //drawShp(shp, p.x, p.y, cl3);  // side
+     }
+   }
+ }
+ 
+ /*
+ ctx.lineWidth = lw2;
+ for (let s of side) {
+   let p = convCoord(s.x, s.y);
+   drawShp(shp, p.x, p.y, cl3);
+ }
+ */
+ 
+ //drawRndItems();
+ drawItems();
+ //moveItem();
+ //changeDirs();
+ 
+ setId();
+ ctx.lineWidth = 3.8;
+ drawRect1(r1, '#3344');
+ drawRect1(r2, '#3344');
+ drawRect1(r3, '#3344');
+ drawRect1(r4, '#3344');
+ 
+ drawRect1(r5, '#3344');
+ //drawRect1(r6, '#3344');
+ //drawRect1(r7, '#3344');
+ //drawRect1(r8, '#3344');
+}
+
+
+
+function drawRndItems() {
+  ctx.lineWidth = lw2;
+  for (i = 0; i < edge; i++) {
+    for (j = 0; j < edge; j++) {
+      if (onGameArea(i, j)) {
+        if (rand() > 0.8) {
+          let p = convCoord(i, j);
+          drawShp(shp, p.x, p.y, cl2);
+        }
+      }
+    }
+  }
+}
+
+
+
+function num(arr) {
+  var _num = 0;
+  for (let _elm of arr) { _num++; }
+  return _num;
+}
+
+
+
+function rndChoice(arr) {
+  let n = num(arr);
+  let r = floor(rand() * n);
+  return arr[r];
+}
+
+
+
+function pntInRect(p, r) {
+  if (p.x < r.x) return false;
+  if (p.y < r.y) return false;
+  let x2 = r.x + r.w;
+  if (p.x > x2) return false;
+  let y2 = r.y + r.h;
+  if (p.y > y2) return false;
+  return true;
+}
+
+
+</script>
+</body>
+</html>
