@@ -2,7 +2,7 @@ You can (re)use the contents of this repository under the conditions of
 either:
 - any osi-approved license
 - any fsf-approved license
-- any cc license
+- any of the following cc licenses: cc0, cc-by-sa, cc-by (any version)
 
 except for the file "butterflies.png", which conditions are explained
 in the comments of the file "butterflies5.html".
