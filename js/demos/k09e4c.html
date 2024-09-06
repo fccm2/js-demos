@@ -1,0 +1,341 @@
+<html>
+<head>
+<title></title>
+<style>
+body {
+  background:#112;
+  padding-left:14px;
+  padding-top:12px;
+}
+canvas { background:#223; }
+</style>
+</head>
+<body>
+<canvas width="360" height="360" id="c1">
+</canvas>
+<script>
+var cnv = document.querySelector("#c1");
+var ctx = cnv.getContext("2d");
+
+const w = 360;
+const h = 360;
+
+var i = 0;
+var j = 0;
+
+var rand = Math.random ;
+var round = Math.round ;
+var floor = Math.floor ;
+var abs = Math.abs ;
+
+function rnd(a, b){
+  return a + rand() * (b-a);
+}
+
+var sp = 45;
+
+const sv1 = 'M 8 8 h 29 v 29 h -29 Z';
+const shp1 = new Path2D(sv1);
+
+const sv2 = 'M 12 10 l 20 13 l -20 13 v -26 Z';
+const shp2 = new Path2D(sv2);
+
+const sv3 = 'M 8 36 Q 22.5 -18 37 36 Z';
+const shp3 = new Path2D(sv3);
+
+const sv4 = 'M 8 36 l 5 -23 l 19 0 l 5 23 Z';
+const shp4 = new Path2D(sv4);
+
+const sv7 = 'M 33 10 l -20 13 l 20 13 v -26 Z';
+const shp7 = new Path2D(sv7);
+
+const shp5 = new Path2D();
+shp5.arc(22.5, 22.5, 14, 0, 6.2830);
+
+const shp6 = new Path2D();
+shp6.arc(22.5, 22.5, 5, 0, 6.2830);
+
+const Tr = shp1;
+const Hr = shp2;
+const Fl = shp5;
+const Pt = shp6;
+const Qn = shp3;
+const Kg = shp4;
+
+const H2 = shp7;
+
+const dTr = [
+  {x:1, y:0},
+  {x:2, y:0},
+  {x:3, y:0},
+  {x:4, y:0},
+  {x:0, y:1},
+  {x:0, y:2},
+  {x:0, y:3},
+  {x:0, y:4},
+  {x:-1, y:0},
+  {x:-2, y:0},
+  {x:-3, y:0},
+  {x:-4, y:0},
+  {x:0, y:-1},
+  {x:0, y:-2},
+  {x:0, y:-3},
+  {x:0, y:-4},
+];
+const dHr = [
+  {x:1, y:2},
+  {x:2, y:1},
+  {x:1, y:-2},
+  {x:-2, y:1},
+  {x:-1, y:2},
+  {x:-1, y:-2},
+  {x:-2, y:-1},
+  {x:2, y:-1},
+];
+const dFl = [
+  {x:1, y:1},
+  {x:2, y:2},
+  {x:3, y:3},
+  {x:-1, y:-1},
+  {x:-2, y:-2},
+  {x:-3, y:-3},
+  {x:1, y:-1},
+  {x:-1, y:1},
+  {x:2, y:-2},
+  {x:-2, y:2},
+  {x:-3, y:3},
+  {x:3, y:-3},
+];
+const dQn = dFl.concat(dTr);
+
+const dKg = [
+  {x:1, y:0},
+  {x:0, y:1},
+  {x:1, y:1},
+  {x:1, y:-1},
+  {x:-1, y:1},
+  {x:-1, y:-1},
+  {x:-1, y:0},
+  {x:0, y:-1},
+];
+const d0 = [
+  {x:0, y:0},
+]
+const dP1 = [
+  {x:0, y:1},
+  {x:0, y:0},
+  {x:0, y:1},
+  {x:0, y:0},
+  {x:0, y:-1},
+];
+const dP2 = [
+  {x:0, y:-1},
+  {x:0, y:0},
+  {x:0, y:-1},
+  {x:0, y:0},
+  {x:0, y:1},
+];
+
+var bg = [];
+var bg2 = [];
+
+var d = 0;
+for (i=0; i<8; i++) {
+  for (j=0; j<8; j++) {
+    let x = j * sp;
+    let y = i * sp;
+    let cell = { x:x, y:y };
+    if ((i+j)%2 == 0) {
+      bg.push(cell);
+    } else {
+      bg2.push(cell);
+    }
+  }
+}
+
+const cl1 = '#8e2';
+const cl2 = '#f60';
+
+var ch = [];
+
+function addCh(p, x, y, s, cl) {
+  ch.push(
+   { p:p, x:x, y:y, s:s, cl:cl }
+  );
+}
+
+function initCh() {
+ addCh(Tr, 1, 1, 'Tr', cl1);
+ addCh(Tr, 8, 1, 'Tr', cl1);
+ addCh(Hr, 2, 1, 'Hr', cl1);
+ addCh(H2, 7, 1, 'Hr', cl1);
+ addCh(Fl, 3, 1, 'Fl', cl1);
+ addCh(Fl, 6, 1, 'Fl', cl1);
+ addCh(Qn, 4, 1, 'Qn', cl1);
+ addCh(Kg, 5, 1, 'Kg', cl1);
+
+ addCh(Tr, 1, 8, 'Tr', cl2);
+ addCh(Tr, 8, 8, 'Tr', cl2);
+ addCh(Hr, 2, 8, 'Hr', cl2);
+ addCh(H2, 7, 8, 'Hr', cl2);
+ addCh(Fl, 3, 8, 'Fl', cl2);
+ addCh(Fl, 6, 8, 'Fl', cl2);
+ addCh(Qn, 4, 8, 'Qn', cl2);
+ addCh(Kg, 5, 8, 'Kg', cl2);
+
+ for (i=1; i<=8; i++) {
+  addCh(Pt, i, 2, 'P1', cl1);
+  addCh(Pt, i, 7, 'P2', cl2);
+ }
+}
+
+initCh();
+
+function setId() {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+function drawBg() {
+  setId();
+  ctx.fillStyle = '#28283b';
+  for (let c of bg) {
+    ctx.fillRect(c.x, c.y, sp, sp);
+  }
+  ctx.fillStyle = '#223';
+  for (let c2 of bg2) {
+    ctx.fillRect(c2.x, c2.y, sp, sp);
+  }
+}
+
+cnv.addEventListener("mousedown",
+  function (e) {
+    if (0) {
+     let pos = getPos(e);
+    }
+    if (1) {
+      ch = [];
+      initCh();
+    }
+  }, false
+);
+
+function getPos(mouse) {
+  let cRect = cnv.getBoundingClientRect();
+  return {
+    x:mouse.clientX - cRect.left,
+    y:mouse.clientY - cRect.top,
+  };
+}
+
+function _drawShp2(shp, _x, _y, cl) {
+  setId();
+  _x--;  _y--;
+  ctx.translate(sp * _x, sp * _y);
+  ctx.filter = 'blur(2px)';
+  ctx.strokeStyle = cl;
+  ctx.stroke(shp);
+  setId();
+  ctx.translate(sp * _x, sp * _y);
+  ctx.filter = 'none';
+  ctx.strokeStyle = '#223';
+  ctx.stroke(shp);
+}
+
+function _drawShp1(shp, _x, _y, cl) {
+  setId();
+  _x--;  _y--;
+  ctx.translate(sp * _x + 1, sp * _y + 1);
+  ctx.filter = 'blur(2px)';
+  if (cl == cl1) ctx.strokeStyle = '#000';
+  if (cl == cl2) ctx.strokeStyle = '#000';
+  ctx.stroke(shp);
+  setId();
+  ctx.translate(sp * _x, sp * _y);
+  ctx.filter = 'none';
+  ctx.strokeStyle = cl;
+  ctx.stroke(shp);
+}
+
+function _drawShp0(shp, _x, _y, cl) {
+  _x--;  _y--;
+  setId();
+  ctx.translate(sp * _x, sp * _y);
+  ctx.strokeStyle = cl;
+  ctx.stroke(shp);
+}
+
+var drawShp = _drawShp1;
+
+
+setTimeout(loop, 100);
+function loop() {
+ 
+ drawBg();
+ 
+ ctx.lineWidth = 4;
+ 
+ var n = 0;
+ for (let p of ch) {
+   drawShp(p.p, p.x, p.y, p.cl);
+   n++;
+ }
+ 
+ function num(arr) {
+   var _num = 0;
+   for (let el of arr) { _num++; }
+   return _num;
+ }
+ function take(arr) {
+   let r3 = floor( rand() * num(arr) );
+   return arr[r3];
+ }
+ 
+ var r = floor(rand() * n);
+ 
+ n = 0;
+ for (let p of ch) {
+   if (n == r) {
+     var d = d0;
+     if (p.s == 'P1') { d = dP1; }
+     if (p.s == 'P2') { d = dP2; }
+     if (p.s == 'Hr') { d = dHr; }
+     if (p.s == 'Fl') { d = dFl; }
+     if (p.s == 'Tr') { d = dTr; }
+     if (p.s == 'Qn') { d = dQn; }
+     if (p.s == 'Kg') { d = dKg; }
+     
+     function kind(x, y) {
+       for (let p of ch) {
+         if (p.x == x && p.y == y) {
+           return p.s;
+         }
+       }
+       if (x < 1) return '-';
+       if (y < 1) return '-';
+       if (x > 8) return '-';
+       if (y > 8) return '-';
+       return '0';
+     }
+     
+     {
+       let n2 = num(d);
+       let r2 = floor(rand() * n2);
+       let s = d[r2];
+
+       let x_ = ch[n].x + s.x;
+       let y_ = ch[n].y + s.y;
+     
+       if (kind(x_, y_) == '0') {
+         p.x = x_;
+         p.y = y_;
+       }
+     }
+   }
+   n++;
+ }
+ 
+ setTimeout(loop, 600);
+}
+</script>
+</body>
+</html>
