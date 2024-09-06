@@ -9,3 +9,7 @@ chinese-checkers demos:
 - [with more controllers](https://fccm2.github.io/js-demos/js/demos/k10e5c4.html) (that
   could be used with more callbacks)
 
+a demo with butterflies:
+- [9 butterflies](https://fccm2.github.io/js-demos/js/demos/butterflies5.html),
+  provided by [Ivan Voirol](https://opengameart.org/users/ivan-voirol)
+
